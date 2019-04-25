@@ -4,27 +4,34 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 import os
 import json
-import glob
+import sys
 
 app = Flask(__name__)
 api = Api(app)
-RootDir = '/var/restapp/conf'
+rootdir = 'conf'
 
 class Root_Message(Resource):
     def get(self):
-               return 'Welcome to test RestApi v0.1'
+        return 'Welcome to test RestApi v0.1'
 
-class Json_Objects(Resource):
-    def get(self, zion):
-        for current_directory,directories,files in os.walk(RootDir):
-            for file in files:
-                filePath = os.path.join(current_directory,file)
-                with open(filePath,'rb') as f:
-                    result = json.load(f)
-                return json.dumps(result, indent=4, sort_keys=True)
+class Dir_Objects(Resource):
+    def get(self, list):
+        output = {}
+        current_path = str(request.path)[1:].split("/")
+        output["current_path"] = current_path[0]
+        return output
+
+class File_Objects(Resource):
+    def get(self, data):
+        output = {}
+        current_path = str(request.path)[1:].split("/")
+        output["current_path"] = current_path[1]
+        #open json object in dir (output)
+        return output
 
 api.add_resource(Root_Message, '/')
-api.add_resource(Json_Objects, '/conf/<string:zion>')
+api.add_resource(Dir_Objects, '/<string:list>')
+api.add_resource(File_Objects, '/conf/<string:data>')
 
 if __name__ == '__main__':
      app.run()
