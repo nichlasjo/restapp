@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from waitress import serve
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask import json
@@ -35,4 +35,4 @@ api.add_resource(Dir_Objects, '/<string:list>/')
 api.add_resource(File_Objects, '/conf/<string:data>/')
 
 if __name__ == '__main__':
-     app.run()
+     serve(app, host='127.0.0.1', port=5000)
