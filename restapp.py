@@ -24,15 +24,16 @@ class Dir_Objects(Resource):
 class File_Objects(Resource):
     def get(self, data):
         current_path = str(request.path)[1:]
-        output = current_path.split('/')[1:][0]       
+        output = current_path.split('/')[1:][0]
         json_file = current_path + '/' + str(output) + '.json'
-        with open(json_file,'rb') as f:                              
-            result = json.load(f)                                    
+        with open(json_file,'rb') as f:
+            result = json.load(f)
         return json.dumps(result, indent=4, sort_keys=True)
-                                                           
-api.add_resource(Root_Message, '/')                        
+
+api.add_resource(Root_Message, '/')
 api.add_resource(Dir_Objects, '/<string:list>')
 api.add_resource(File_Objects, '/conf/<string:data>')
-                                                     
-if __name__ == '__main__':                           
+
+if __name__ == '__main__':
      app.run()
+
