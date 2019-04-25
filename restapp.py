@@ -5,7 +5,6 @@ from flask_restful import Resource, Api
 from flask import json
 import os
 import sys
-import pprint
 
 app = Flask(__name__)
 api = Api(app)
