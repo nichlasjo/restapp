@@ -2,9 +2,10 @@
 
 from flask import Flask, request
 from flask_restful import Resource, Api
+from flask import json
 import os
-import json
 import sys
+import pprint
 
 app = Flask(__name__)
 api = Api(app)
@@ -23,17 +24,17 @@ class Dir_Objects(Resource):
 
 class File_Objects(Resource):
     def get(self, data):
+        result = {}
         current_path = str(request.path)[1:]
         output = current_path.split('/')[1:][0]
         json_file = current_path + '/' + str(output) + '.json'
         with open(json_file,'rb') as f:
             result = json.load(f)
-        return json.dumps(result, indent=4, sort_keys=True)
+        return result
 
 api.add_resource(Root_Message, '/')
-api.add_resource(Dir_Objects, '/<string:list>')
-api.add_resource(File_Objects, '/conf/<string:data>')
+api.add_resource(Dir_Objects, '/<string:list>/')
+api.add_resource(File_Objects, '/conf/<string:data>/')
 
 if __name__ == '__main__':
      app.run()
-
