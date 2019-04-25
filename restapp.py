@@ -17,21 +17,22 @@ class Root_Message(Resource):
 class Dir_Objects(Resource):
     def get(self, list):
         output = {}
-        current_path = str(request.path)[1:].split("/")
+        current_path = str(request.path)[1:].split('/')
         output["current_path"] = current_path[0]
         return output
 
 class File_Objects(Resource):
     def get(self, data):
-        output = {}
-        current_path = str(request.path)[1:].split("/")
-        output["current_path"] = current_path[1]
-        #open json object in dir (output)
-        return output
-
-api.add_resource(Root_Message, '/')
+        current_path = str(request.path)[1:]
+        output = current_path.split('/')[1:][0]       
+        json_file = current_path + '/' + str(output) + '.json'
+        with open(json_file,'rb') as f:                              
+            result = json.load(f)                                    
+        return json.dumps(result, indent=4, sort_keys=True)
+                                                           
+api.add_resource(Root_Message, '/')                        
 api.add_resource(Dir_Objects, '/<string:list>')
 api.add_resource(File_Objects, '/conf/<string:data>')
-
-if __name__ == '__main__':
+                                                     
+if __name__ == '__main__':                           
      app.run()
