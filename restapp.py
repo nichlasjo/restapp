@@ -8,7 +8,6 @@ import sys
 
 app = Flask(__name__)
 api = Api(app)
-rootdir = 'conf'
 
 class Root_Message(Resource):
     def get(self):
