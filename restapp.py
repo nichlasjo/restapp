@@ -3,8 +3,6 @@ from waitress import serve
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask import json
-import os
-import sys
 
 app = Flask(__name__)
 api = Api(app)
@@ -17,7 +15,7 @@ class Dir_Objects(Resource):
     def get(self, list):
         output = {}
         current_path = str(request.path)[1:].split('/')
-        output["current_path"] = current_path[0]
+        output['current_name'] = current_path[0]
         return output
 
 class File_Objects(Resource):
@@ -36,3 +34,4 @@ api.add_resource(File_Objects, '/conf/<string:data>/')
 
 if __name__ == '__main__':
      serve(app, host='127.0.0.1', port=5000)
+
