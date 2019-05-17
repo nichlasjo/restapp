@@ -8,12 +8,6 @@ import os
 app = Flask(__name__)
 api = Api(app)
 
-data_result = {}
-data = json.loads(request.data)
-data_current_path = str(request.path)[1:]
-data_output = data_current_path.split('/')[1:][0]
-data_json_file = data_current_path + '.json'
-
 class Root_Message(Resource):
     def get(self):
         return 'Welcome to test RestApi v0.1'
@@ -37,22 +31,33 @@ class File_GET(Resource):
 
 class File_POST(Resource):
     def post(self, data):
-        json_file = data_current_path + '.json'
-        with open(data_json_file,'w') as f:
-            data_result = json.dump(data, f, indent=4)
+        result = {}
+        data = json.loads(request.data)
+        current_path = str(request.path)[1:]
+        output = current_path.split('/')[1:][0]
+        json_file = current_path + '.json'
+        with open(json_file,'w') as f:
+            result = json.dump(data, f, indent=4)
         return data
 
 class File_OPEN(Resource):
     def get(self, data):
-        json_file = data_current_path + '.json'
-        with open(data_json_file,'rb') as f:
-            data_result = json.load(f)
+        result = {}
+        current_path = str(request.path)[1:]
+        output = current_path.split('/')[1:][0]
+        json_file = current_path + '.json'
+        with open(json_file,'rb') as f:
+            result = json.load(f)
         return result
 
 class File_DELETE(Resource):
     def delete(self, data):
+        result = {}
+        current_path = str(request.path)[1:]
+        output = current_path.split('/')[1:][0]
+        json_file = current_path + '.json'
         os.remove(json_file)
-        return data_json_file + " is deleted"
+        return json_file + " is deleted"
 
 
 api.add_resource(Root_Message, '/')
