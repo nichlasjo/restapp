@@ -3,6 +3,7 @@ from waitress import serve
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask import json
+import os
 
 app = Flask(__name__)
 api = Api(app)
@@ -49,10 +50,21 @@ class File_OPEN(Resource):
             result = json.load(f)
         return result
 
+class File_DELETE(Resource):
+    def delete(self, data):
+        result = {}
+        current_path = str(request.path)[1:]
+        output = current_path.split('/')[1:][0]
+        json_file = current_path + '.json'
+        os.remove(json_file)
+        return json_file + " is deleted"
+
+
 api.add_resource(Root_Message, '/')
 api.add_resource(Dir_Objects, '/<string:list>/', methods=['GET'])
 api.add_resource(File_POST, '/data/<string:data>', methods=['POST'])
 api.add_resource(File_OPEN, '/data/<string:data>', methods=['GET'])
+api.add_resource(File_DELETE, '/data/<string:data>', methods=['DELETE'])
 api.add_resource(File_GET, '/conf/<string:data>/', methods=['GET'])
 
 if __name__ == '__main__':
