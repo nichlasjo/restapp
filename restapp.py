@@ -9,7 +9,7 @@ api = Api(app)
 
 class Root_Message(Resource):
     def get(self):
-        return 'Welcome to test RestApi v0.1'
+        return 'Welcome to test RestApi v0.2'
 
 class Dir_Objects(Resource):
     def get(self, list):
@@ -18,7 +18,7 @@ class Dir_Objects(Resource):
         output['current_name'] = current_path[0]
         return output
 
-class File_Objects(Resource):
+class File_GET(Resource):
     def get(self, data):
         result = {}
         current_path = str(request.path)[1:]
@@ -28,9 +28,21 @@ class File_Objects(Resource):
             result = json.load(f)
         return result
 
+class File_POST(Resource):
+    def post(self, data):
+        result = {}
+        data = json.loads(request.data)
+        current_path = str(request.path)[1:]
+        output = current_path.split('/')[1:][0]
+        json_file = current_path + '.json'
+        with open(json_file,'w') as f:
+            result = json.dump(data, f, indent=4)
+        return data
+
 api.add_resource(Root_Message, '/')
-api.add_resource(Dir_Objects, '/<string:list>/')
-api.add_resource(File_Objects, '/conf/<string:data>/')
+api.add_resource(Dir_Objects, '/<string:list>/', methods=['GET'])
+api.add_resource(File_POST, '/data/<string:data>', methods=['POST'])
+api.add_resource(File_GET, '/conf/<string:data>/', methods=['GET'])
 
 if __name__ == '__main__':
      serve(app, host='127.0.0.1', port=5000)
