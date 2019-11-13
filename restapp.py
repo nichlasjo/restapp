@@ -68,5 +68,5 @@ api.add_resource(File_DELETE, '/data/<string:data>', methods=['DELETE'])
 api.add_resource(File_GET, '/conf/<string:data>/', methods=['GET'])
 
 if __name__ == '__main__':
-     serve(app, host='127.0.0.1', port=5000)
+     serve(app, host='0.0.0.0', port=5000)
 
